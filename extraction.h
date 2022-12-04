@@ -3,6 +3,8 @@
     https://cplusplus.com/reference/fstream/ifstream/ (Used for reading in data from a csv)
     https://cplusplus.com/reference/string/stof/      (Used for converting strings to floats)
     https://cplusplus.com/doc/tutorial/arrays/        (Used to remember the way to initialize arrays)
+    https://stackoverflow.com/questions/66521745/eigen-dense-no-such-file-or-directory-in-visual-studio-code (Used to finally figure out how to include the external library)
+    https://eigen.tuxfamily.org/dox/group__TutorialLinearAlgebra.html (Used to set up the basic linear algebra with the external library)
 
  DATA REFERENCES:
     https://www.fda.gov/media/99059/download (Daily reccomended values of macronutrients from the FDA)
