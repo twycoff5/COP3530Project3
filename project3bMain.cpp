@@ -1,5 +1,6 @@
 #include "extraction.h"
 #include <string>
+#include "Eigen/Dense"
 
 int main () {
     //read out loading message
@@ -34,6 +35,17 @@ int main () {
         }
     }
 
+    //perform matrix reduction to solve Ax = b (where A is the food nutrient values, b is the DRVs, and x is the amounts needed)
+    Eigen::Matrix<float, 7, 7> foods;
+    Eigen::Vector<float, 7> DRVs;
+    foods    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
+    DRVs << 78, 20, 300, 275, 2300, 28, 50;
+    Eigen::VectorXf amounts = foods.colPivHouseholderQr().solve(DRVs);
+
+    //outpout the linear algebra setup and solution
+    cout << "Matrix of given food nutritional values: \n" << foods << endl;
+    cout << "Vector of given DRVs: \n" << DRVs << endl;
+    cout << "Amounts for FDA DRVS: \n" << amounts << endl;
 
     return 0;
 }
