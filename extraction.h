@@ -37,6 +37,7 @@
 #include <fstream>
 #include <string>
 #include "orderedmap.h"
+#include "unorderedmap.h"
 
 using namespace std;
 
@@ -69,24 +70,28 @@ orderedmap mapBuild() {
             // cout << nutrients[i] << " || ";
         }
         result.insert(foodType, nutrients);
-        cout << numRows++ << endl;
+        // cout << numRows++ << " " << foodType << endl;
         // cout << endl;
     }
     return result;
 }
 
-bool unorderedMapBuild() {
+unorderedmap unorderedMapBuild() {
     string delS = "";                                    // voiding string
     string foodType = "";                                // description of food
     float delF = 0;                                      // voiding float
     float nutrients [38] = {};                           // floats for the nutrients
 
+    unorderedmap result;
+
     ifstream data("data/food.csv"); // open the data file
     if (!data) {
         cout << "ERROR: Could not open data file. Check file path" << '\n';
-        return false;
+        return result;
     }
     getline(data, delS); // pull off the first line (column headers)
+
+    int numRows = 0;
 
     while (getline(data, delS)) { // temporarily store each line of data
         delS.erase(0, delS.find("\",\"")+2); //remove the category
@@ -98,7 +103,10 @@ bool unorderedMapBuild() {
             nutrients[i] = stof(delS.substr(1, delS.find("\",\"")));
             // cout << nutrients[i] << " || ";
         }
+        cout << foodType << " ";
+        result.insert(foodType, nutrients);
+        cout << numRows++ << " " << foodType << endl;
         // cout << endl;
     }
-    return true;
+    return result;
 }

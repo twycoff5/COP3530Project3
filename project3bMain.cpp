@@ -7,7 +7,7 @@ int main () {
     //read out loading message
     cout << endl << "Food databases are being loaded..." << endl;
     orderedmap map1 = mapBuild();
-    unorderedMapBuild();
+    unorderedmap map2 = unorderedMapBuild();
     cout << "Food databases are loaded!" << endl;
 
     //read out purpose / instructions

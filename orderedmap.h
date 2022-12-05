@@ -124,7 +124,7 @@ float* findsecond(string first){
 
 //return a pointer to the second for the given first
 //return nullptr if does not exist
-
+    cout <<first << endl;
     orderedmap* curr = search(first);
     if(*(curr->first) == first){
         return curr->second;
@@ -148,7 +148,7 @@ void print(orderedmap* root){
     if(root->left != nullptr){
         print(root->left);
     }
-    cout<<*(root->first)<<" ";
+    cout<<*(root->first)<<" || ";
 
     if(root->right != nullptr){
         print(root->right);
