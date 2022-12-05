@@ -1,26 +1,21 @@
 /*
-
-
-
-
-
 NOTES:
 insert(string first, float second[38])
 orderedmap* search(string first)
     returns pointer to node with given key
     if nonexistent, returns pointer to would-be parent
 float* findsecond(string first)
-    returns pointer to 0 index in second
-    indices are accessed by adding 0, 1, 2,...,37 to raw pointer value
-    this is because C++ is stupid
+    Second is now a VECTOR NOT A POINTER
+    First is still stored as a pointer for some reason
+    This is because coding is hard
 print(orderedmap* root)
     currently prints out all map's keys in order
     keys are stored in alphabetical order
-
 */
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -30,7 +25,7 @@ public:
     orderedmap* root;
 
     //number of elements in map
-    int count = 0;
+    int count;
 
     //left and right node child
     orderedmap *left;
@@ -41,7 +36,9 @@ public:
 
     //value
     //index i in array accessed by adding 0,1,2,3,...,37 to raw pointer value
-    float* second;
+    vector<float> second;
+
+    orderedmap() : root(nullptr), count(0), left(nullptr), right(nullptr), first(nullptr), second(38, 0) {}
 
 orderedmap* search(string first){
 
@@ -75,7 +72,7 @@ orderedmap* search(string first){
 }
 
 
-void insert(string first, float second[38]){
+void insert(string first, vector<float> second){
 
 //function to insert a new node into the map
 
@@ -88,11 +85,11 @@ void insert(string first, float second[38]){
     newnode->first = new string;
     *(newnode->first) = first;
 
-    newnode->second = new float[38]();
+    newnode->second = second;
     //*(newnode->second) = *second;
-    for(int i = 0; i < 38; i++){
-        *(newnode->second + i) = *(second + i);
-    }
+    //for(int i = 0; i < 38; i++){
+    //    *(newnode->second + i) = *(second + i);
+    //}
 
     //base case. Replace map root with new node if empty
     if(root == nullptr){
@@ -111,25 +108,25 @@ void insert(string first, float second[38]){
         //if key already exists, replace second with new second
         //should never be needed but functionality is here for completeness
         count--;
-        for(int i = 0; i < 38; i++){
-            *(curr->second + i) = *(second + i);
-        }
+        curr->second = second;
     }
     
     //balance tree after insertion
-    curr = balance(curr);
+    root = balance(root);
 }
 
-float* findsecond(string first){
+vector<float> findsecond(string first){
 
 //return a pointer to the second for the given first
-//return nullptr if does not exist
+//return 0 if does not exist
+
+    vector<float> zeros(38, 0);
 
     orderedmap* curr = search(first);
     if(*(curr->first) == first){
         return curr->second;
     } else{
-        return nullptr;
+        return zeros;
     }
 }
 
@@ -183,37 +180,38 @@ int diff(orderedmap* route){
         return 0;
     }
     int left = height(route->left);
+    
+    
+    
+    
     int right = height(route->right);
     int bal = left - right;
+    
     return bal;
 }
 
 orderedmap* leftleft(orderedmap* parent){
-    orderedmap* temp;
-    temp = parent->left;
+    orderedmap* temp = parent->left;
     parent->left = temp->right;
     temp->right = parent;
     return temp;
 }
 
 orderedmap* rightright(orderedmap* parent){
-    orderedmap* temp;
-    temp = parent->right;
+    orderedmap* temp = parent->right;
     parent->right = temp->left;
     temp->left = parent;
     return temp;
 }
 
 orderedmap* rightleft(orderedmap* parent){
-    orderedmap* temp;
-    temp = parent->right;
+    orderedmap* temp = parent->right;
     parent->right = leftleft(temp);
     return rightright(parent);
 }
 
 orderedmap* leftright(orderedmap* parent){
-    orderedmap* temp;
-    temp = parent->left;
+    orderedmap* temp = parent->left;
     parent->left = rightright(temp);
     return leftleft(parent);
 }
@@ -222,7 +220,17 @@ orderedmap* balance(orderedmap* route){
 
 //helper function to balance the tree at a given node and call needed rotations
 
+    if(route == nullptr){
+        //cout<<"Balance nullptr return nullptr"<<endl;
+        return nullptr;
+    }
+    
+    //route->left = balance(left);
+    //route->right = balance(right);
+
     int bal = diff(route);
+    
+//cout<<"Balance "<<*(route->first)<<" balfactor "<<bal<<" ";
 
     if(bal > 1){
         if(diff(route->left) > 0){
@@ -237,6 +245,7 @@ orderedmap* balance(orderedmap* route){
             route = rightright(route);
         }
     }
+    
     return route;
 }
 
@@ -246,39 +255,36 @@ orderedmap* thisroot(){
 
 };
 
-//Functionality test:
-/*
+/*Functionality test:
 
 int main(){
     
 cout<<"pp"<<endl;
-
 orderedmap minorattractedperson;
+vector<float> data(38, 0);
+for(int i = 0; i < 38; i++){
+    data[i] = i*2;
+}
 
-float data[38] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38};
-
-minorattractedperson.insert("trash", data);
-minorattractedperson.insert("crud", data);
-minorattractedperson.insert("litter", data);
-minorattractedperson.insert("refuse", data);
+for(int i = 1000; i < 1100; i++){
+    minorattractedperson.insert(to_string(i), data);
+}
 
 data[0] = 100;
 
-minorattractedperson.insert("garbage", data);
+for(int i = 500; i < 600; i++){
+    minorattractedperson.insert(to_string(i), data);
+}
+
+data[1] = 50;
+
+for(int i = 2000; i < 2200; i++){
+    minorattractedperson.insert(to_string(i), data);
+}
     
 cout<<minorattractedperson.findcount()<<endl;
-
 minorattractedperson.print(minorattractedperson.thisroot());
-cout<<endl;
-for(int i = 0; i < 38; i++){
-    cout<<*(minorattractedperson.findsecond("garbage") + i)<<" ";
-}
-cout<<endl;
-for(int i = 0; i < 38; i++){
-    cout<<*(minorattractedperson.findsecond("trash") + i)<<" ";
-}
 
 return 0;
 }
-
 */
