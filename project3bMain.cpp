@@ -1,11 +1,12 @@
 #include "extraction.h"
 #include <string>
-#include "Eigen/Dense"
+#include <Eigen/Dense>
+#include "orderedmap.h"
 
 int main () {
     //read out loading message
     cout << endl << "Food databases are being loaded..." << endl;
-    mapBuild();
+    orderedmap map1 = mapBuild();
     unorderedMapBuild();
     cout << "Food databases are loaded!" << endl;
 
@@ -22,13 +23,23 @@ int main () {
     cout << endl << "================================================================================" << endl;
     cout << endl << "Please enter 7 foods below: " << endl;
 
+    // map1.print(map1.thisroot());
+
     //loop for user to input foods
+    Eigen::Matrix<float, 7, 7> foods;
     int numFoods = 0;
     string inFood = "";
     while (numFoods < 7) {
         getline(cin, inFood);
-        if ( 1 == 1) { //check if the user input is an entry in the map
-            //add nutrient info for that food to the matrix
+        float* foodData = map1.findsecond(inFood);
+        if ( foodData != nullptr) { //check if the user input is an entry in the map
+            foods(numFoods, 0) = *(foodData + 21);
+            foods(numFoods, 1) = *(foodData + 20);
+            foods(numFoods, 2) = *(foodData + 5);
+            foods(numFoods, 3) = *(foodData + 4);
+            foods(numFoods, 4) = *(foodData + 28);
+            foods(numFoods, 5) = *(foodData + 7);
+            foods(numFoods, 6) = *(foodData + 11);
             numFoods++;
         } else {
             cout << "   That food could not be found. Please try again." << endl;
@@ -36,9 +47,9 @@ int main () {
     }
 
     //perform matrix reduction to solve Ax = b (where A is the food nutrient values, b is the DRVs, and x is the amounts needed)
-    Eigen::Matrix<float, 7, 7> foods;
+    
     Eigen::Vector<float, 7> DRVs;
-    foods    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
+    // foods    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
     DRVs << 78, 20, 300, 275, 2300, 28, 50;
     Eigen::VectorXf amounts = foods.colPivHouseholderQr().solve(DRVs);
 

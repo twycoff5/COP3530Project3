@@ -18,7 +18,7 @@ print(orderedmap* root)
     keys are stored in alphabetical order
 
 */
-
+#pragma once
 #include <string>
 #include <iostream>
 
@@ -27,21 +27,21 @@ using namespace std;
 class orderedmap {
 public:
     //root node of map
-    orderedmap* root;
+    orderedmap* root = nullptr;
 
     //number of elements in map
     int count = 0;
 
     //left and right node child
-    orderedmap *left;
-    orderedmap *right;
+    orderedmap *left = nullptr;
+    orderedmap *right = nullptr;
 
     //key
-    string* first;
+    string* first = nullptr;
 
     //value
     //index i in array accessed by adding 0,1,2,3,...,37 to raw pointer value
-    float* second;
+    float* second = nullptr;
 
 orderedmap* search(string first){
 
@@ -99,7 +99,7 @@ void insert(string first, float second[38]){
         root = newnode;
         return;
     }
-    
+
     //use search helper function to determine proper place in the map
     orderedmap* curr = search(first);
     if(first < *(curr->first)){
