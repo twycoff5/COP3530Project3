@@ -1,6 +1,7 @@
 #include "extraction.h"
 #include <string>
-#include "Eigen/Dense"
+#include <Eigen/Dense>
+#include <unsupported/Eigen/NNLS>
 
 int main () {
     //read out loading message
@@ -36,14 +37,19 @@ int main () {
     }
 
     //perform matrix reduction to solve Ax = b (where A is the food nutrient values, b is the DRVs, and x is the amounts needed)
-    Eigen::Matrix<float, 7, 7> foods;
+    Eigen::Matrix<float, 7, 7> foods1;
+    Eigen::MatrixXf foods2(7, 7);
     Eigen::Vector<float, 7> DRVs;
-    foods    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
+    foods1    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
+    // foods2    << 1,0,0,0,0,0,0,  0,1,0,0,0,0,0,  0,0,1,0,0,0,0,  0,0,0,1,0,0,0,  0,0,0,0,1,0,0,  0,0,0,0,0,1,0,  0,0,0,0,0,0,1; //THIS IS AN EXAMPLE
+    // Eigen::NNLS<Eigen::MatrixXf> check = Eigen::NNLS<Eigen::MatrixXf>::compute(foods2);
+    // Eigen::VectorXf amounts2 = check.solve(DRVs);
+    // Eigen::VectorXf amounts2 = nonneg.solve(DRVs);
     DRVs << 78, 20, 300, 275, 2300, 28, 50;
-    Eigen::VectorXf amounts = foods.colPivHouseholderQr().solve(DRVs);
+    Eigen::VectorXf amounts = foods1.colPivHouseholderQr().solve(DRVs);
 
     //outpout the linear algebra setup and solution
-    cout << "Matrix of given food nutritional values: \n" << foods << endl;
+    cout << endl << "Matrix of given food nutritional values: \n" << foods1 << endl;
     cout << "Vector of given DRVs: \n" << DRVs << endl;
     cout << "Amounts for FDA DRVS: \n" << amounts << endl;
 
