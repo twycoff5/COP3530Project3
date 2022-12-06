@@ -18,7 +18,7 @@ class unorderedmap {
         void insert(string food, float nutrients[38]); //adds nutrients for a food to the hash table
         float* search(string food);                    //returns the nutrients* or nullptr if the food is not in the table
     private:
-        float foodNutrients[7083][38] = {0};        //nutrient data stored by the hash table
+        float foodNutrients[7083][38] = {0};           //nutrient data stored by the hash table
         string foodNames[7083] = {""};                 //names of the foods stored at each index
         int hash(string food);                         //hashes the key to an index in the nutrient array
 };
@@ -44,7 +44,6 @@ float* unorderedmap::search(string food) { //uses linear probing to find the nut
     } else { //linearly probe for the food
         int probeIndex = hashIndex +1;
         while (hashIndex != probeIndex) { //could check every index once
-            // cout << hashIndex -probeIndex << " ";
             if(probeIndex > 7082) { //gaurd from exceeding bounds on first iteration
                 probeIndex = 7082;
             }
@@ -62,11 +61,8 @@ float* unorderedmap::search(string food) { //uses linear probing to find the nut
 }
 
 void unorderedmap::insert(string food, float nutrients[38]) {
-    // cout << " searching ";
     if (search(food) == nullptr) { //check that the food is not already in the hash table
-        // cout << " hashing ";
         int hashIndex = hash(food);
-        // cout << " " << hashIndex << " " << food << " ";
 
         if (foodNames[hashIndex] == "") { //if slot is open, add name and nutrients to table
             foodNames[hashIndex] = food;
@@ -74,12 +70,9 @@ void unorderedmap::insert(string food, float nutrients[38]) {
                 foodNutrients[hashIndex][i] = nutrients[i];
             }
             return;
-            // cout << " open ";
         } else {
-            // cout << " closed ";
             int probeIndex = hashIndex +1;
             while (hashIndex != probeIndex) { //could check every index once
-                // cout << hashIndex - probeIndex << " ";
                 if(probeIndex > 7082) { //gaurd from exceeding boundaries on first run
                     probeIndex = 7082;
                 }
