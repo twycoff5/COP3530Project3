@@ -99,8 +99,9 @@ unorderedmap unorderedMapBuild() {
         // cout << foodType << ": ";
 
         for (int i = 0; i < 38; i++) { //put the remainder of the data in the temporary array of floats
-            delS.erase(0, delS.find("\",\"")+3); //remove the previous nutrient
-            nutrients[i] = stof(delS.substr(1, delS.find("\",\"")));
+            delS.erase(0, delS.find("\",\"")+2); //remove the previous nutrient
+            // cout << " " << delS.substr(1, delS.find("\",\"")-1);
+            nutrients[i] = stof(delS.substr(1, delS.find("\",\"")-1));
             // cout << nutrients[i] << " || ";
         }
         result.insert(foodType, nutrients);
