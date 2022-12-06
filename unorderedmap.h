@@ -65,18 +65,18 @@ float* unorderedmap::search(string food) { //uses linear probing to find the nut
 }
 
 void unorderedmap::insert(string food, float nutrients[38]) {
-    cout << " searching ";
+    // cout << " searching ";
     if (search(food) == nullptr) { //check that the food is not already in the hash table
-        cout << " hashing ";
+        // cout << " hashing ";
         int hashIndex = hash(food);
-        cout << " " << hashIndex << " " << food << " ";
+        // cout << " " << hashIndex << " " << food << " ";
 
         if (foodNames[hashIndex] == "") { //if slot is open, add name and nutrients to table
             foodNames[hashIndex] = food;
             foodNutrients[hashIndex] = nutrients;
-            cout << " open ";
+            // cout << " open ";
         } else {
-            cout << " closed ";
+            // cout << " closed ";
             int probeIndex = hashIndex +1;
             while (hashIndex != probeIndex) { //could check every index once
                 // cout << hashIndex - probeIndex << " ";
